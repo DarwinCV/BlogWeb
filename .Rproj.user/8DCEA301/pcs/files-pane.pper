@@ -1,0 +1,9 @@
+{
+    "path" : "~/BlogWebSite_Academic/content/home",
+    "sortOrder" : [
+        {
+            "ascending" : false,
+            "columnIndex" : 2
+        }
+    ]
+}
