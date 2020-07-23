@@ -48,4 +48,4 @@ user_groups:
 - Visitors
 ---
 
-Soy un Científico de Datos y Actuario en una aseguradora ecuatoriana, donde trabajo en la fijacion de precios, reservas y modelos de machine learning.  Me gusta liderar pero siempre acepto ideas y criticas de un colaborador entusiasta. Mi pasatiempo es leer acerca de nuevos modelo de ML, AI y herramientas de Big Data para luego implementarlas en mi trabajo.
+Soy un científico de datos y actuario en una aseguradora ecuatoriana, donde trabajo en la fijación de precios, reservas y modelos de machine learning.  Me gusta liderar pero siempre acepto ideas y críticas de un colaborador entusiasta. Mi pasatiempo es leer acerca de nuevos modelo de ML, AI y herramientas de Big Data para luego implementarlas en mi trabajo.

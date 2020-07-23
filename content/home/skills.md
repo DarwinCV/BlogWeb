@@ -41,7 +41,7 @@ subtitle = ""
 [[feature]]
   icon = "chart-area"
   icon_pack = "fas"
-  name = "Acturial Models"
+  name = "Actuarial Models"
   description = "70%"  
 
 [[feature]]
