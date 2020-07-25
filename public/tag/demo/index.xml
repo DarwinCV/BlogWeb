@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Demo | Darwin Cubi</title>
-    <link>/tag/demo/</link>
-      <atom:link href="/tag/demo/index.xml" rel="self" type="application/rss+xml" />
+    <link>http://darwincubi.rbind.io/tag/demo/</link>
+      <atom:link href="http://darwincubi.rbind.io/tag/demo/index.xml" rel="self" type="application/rss+xml" />
     <description>Demo</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© Darwin Cubi 2020</copyright><lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/images/icon_hu27a1f3b1042333052df4ad25cfdb566c_2722591_512x512_fill_lanczos_center_2.png</url>
+      <url>http://darwincubi.rbind.io/images/icon_hu27a1f3b1042333052df4ad25cfdb566c_2722591_512x512_fill_lanczos_center_2.png</url>
       <title>Demo</title>
-      <link>/tag/demo/</link>
+      <link>http://darwincubi.rbind.io/tag/demo/</link>
     </image>
     
     <item>
       <title>External Project</title>
-      <link>/project/external-project/</link>
+      <link>http://darwincubi.rbind.io/project/external-project/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>/project/external-project/</guid>
+      <guid>http://darwincubi.rbind.io/project/external-project/</guid>
       <description></description>
     </item>
     
