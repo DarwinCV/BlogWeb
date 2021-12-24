@@ -32,17 +32,18 @@
 #  name = "Courses"
 #  url = "courses/"
 #  weight = 50
-
-
-[[main]]
-  name = "Contacto"
-  url = "/contact"
-  weight = 60
   
 [[main]]
   name = "Experiencia"
   url = "/resume"
+  weight = 60
+
+[[main]]
+  name = "Contacto"
+  url = "/contact"
   weight = 70
+
+
 [[main]]
   name = "CV"
   url = "/docs/CV_Darwin_Cubi.pdf"
