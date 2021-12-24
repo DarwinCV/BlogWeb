@@ -11,7 +11,7 @@ education:
     institution: Universidad Central del Ecuador
     year: 2016
 
-email: ""
+email: "darwin.cubi@gmail.com"
 interests:
 - Ciencia Actuarial
 - Inteligencia Artificial
