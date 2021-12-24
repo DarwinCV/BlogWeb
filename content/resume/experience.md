@@ -18,18 +18,48 @@ date_format = "January 2006"
 #   Leave `date_end` empty if it's your current employer.
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 [[experience]]
+  title = "Actuario de Reservas y Tarifas"
+  company = "Eko Actuarial"
+  company_url = "https://ekoactuarial.com/"
+  location = "Quito"
+  date_start = "2021-08-10"
+  date_end = ""
+  description = """
+  Responsabilidades:
+  
+  * Pricing seguros generales y vida
+  * Reservab IBNR, RRC 
+  """
+
+[[experience]]
+  title = "Jefe de Inteligencia de Negocios"
+  company = "Megaprofer"
+  company_url = ""
+  location = "Quito"
+  date_start = "2021-04-01"
+  date_end = "2021-08-01"
+  description = """
+  Responsabilidades:
+  
+  * Stocks de seguridad
+  * Dashboard 
+  * Modelo de demanda de productos
+  """
+
+
+[[experience]]
   title = "Data Scientist - Actuario"
   company = "Aseguradora del Sur"
   company_url = "https://aseguradoradelsur.com/home"
   location = "Quito"
   date_start = "2017-06-05"
-  date_end = ""
+  date_end = "2021-03-31"
   description = """
   Responsabilidades:
   
-  * Pricing
-  * Reservas
-  * Machine Learning
+  * Pricing de seguros generales
+  * Reservas IBNR y RRC
+  * Modelos de ML y AI
   """
 
 [[experience]]
