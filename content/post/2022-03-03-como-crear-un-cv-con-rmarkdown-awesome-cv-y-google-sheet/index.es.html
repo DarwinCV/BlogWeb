@@ -1,0 +1,298 @@
+---
+title: Como crear un CV con Rmarkdown, Awesome CV y Google Sheet
+author: Darwin Cubi
+date: '2022-03-02'
+slug: como-crear-un-cv-con-rmarkdown-awesome-cv-y-google-sheet
+categories:
+  - R
+  - Rmarkdown
+  - CV
+  - AwesomeCV
+tags:
+  - R Markdown
+  - CV
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-03-02T17:45:45-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index.es_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="cv-en-r" class="section level1">
+<h1>CV en R</h1>
+<p>Al ingresar al mundo laboral o en la búsqueda de nuevas oportunidades de empleo todos hemos estado en la tarea de crear o actualizar nuestro curriculum y casi siempre la principal herramienta es Word seguido de Canva o Adobe ilustrator (para los mas avanzados). Las dos ultimas opciones si bien ofrecen mucha personalización en cuanto diseño no permiten tanta flexibilidad al momento de actualizar información o que se adapten facilmente a un flujo de trabajo. Por otro lado Word tienen plantillas con diseños algo sosos y la lucha constante con las alineaciones, sangrados y estilos al momento de ingresar nueva información.</p>
+<p>Hace un par de años me enfrente a este problema y tuve la suerte de encontrar la solución en el paquete vitae desarrollado por <a href="https://github.com/mitchelloharawild/vitae"><strong>Mitchell O’Hara-Wild</strong></a>. Este paquete permite crear un cv con 6 tipos de formato:</p>
+<ol style="list-style-type: decimal">
+<li>Awesome-CV format</li>
+<li>Hydman</li>
+<li>ModernCV</li>
+<li>Twenty seconds</li>
+<li>latexcv</li>
+<li>markdown-cv</li>
+</ol>
+<p><a href="https://github.com/mitchelloharawild/vitae#examples-of-using-vitae">Aquí</a> puede ver los ejemplos de los diferentes formatos junto con su código fuente. En los personal me agrada la plantilla Awesome-CV y de hecho todo este tutorial se desarrollada enfocada a este estilo de cv.</p>
+<p>Primero deberá crear un proyecto en Rstudio pues aprovecharemos el control de versiones git, en este <a href="https://www.geo.uzh.ch/microsite/reproducible_research/post/rr-rstudio-git/#:~:text=In%20RStudio%20Select%20File%20%3E%20New,repository%20to%20your%20project%20folder">enlace</a> podrá encontrar el paso a paso de como crear un proyecto con control de versiones git.</p>
+<p>El primer paso será instalar el paquete vitae</p>
+<pre class="r"><code>install.packages(&quot;vitae&quot;)</code></pre>
+<p>y luego crear una plantilla de awesome cv con markdown</p>
+<p><img src="pic1.png" />
+<img src="pic2.png" />
+Esto creara la siguiente plantilla</p>
+<p><img src="pic3.png" />
+Para compilar deberá dar click en ‘Knit’ y tendrá el siguiente pdf</p>
+<p><img src="pic4.png" />
+En los parámetros YAML puede especificar datos como nombre, posición, dirección, email, etc. <a href="https://cran.r-project.org/web/packages/vitae/vignettes/vitae.html">Aquí</a> podrá encontrar más detalle acerca de cada parámetro disponible.</p>
+<p>Las datos para el cv se ingresan en un tribble y se transforman a formato awesome con la función <code>detailed_entries()</code> que tiene los parametros:</p>
+<ul>
+<li>data: tribble, tibble o dataframe con los datos</li>
+<li>what: nombre de la actividad o titulo</li>
+<li>when: fecha de la actividad o titulo</li>
+<li>with: empresa o institución</li>
+<li>where: lugar de la actividad o titulo</li>
+<li>why : para datos adicionales (estos pueden ser una lista de valores)</li>
+</ul>
+<p>También existe función <code>brief_entries(data, what, when, with, .protect = TRUE)</code> que es similar pero con menos argumentos. Para mas informacion acerca de estas funciones puede escribir en la consola <code>?detailed_entries</code> o <code>?brief_entries</code></p>
+<p>El siguiente código</p>
+<pre class="r"><code>tribble(
+  ~ Degree, ~ Year, ~ Institution, ~ Where,
+  &quot;Informal studies&quot;, &quot;1889-91&quot;, &quot;Flying University&quot;, &quot;Warsaw, Poland&quot;,
+  &quot;Master of Physics&quot;, &quot;1893&quot;, &quot;Sorbonne Université&quot;, &quot;Paris, France&quot;,
+  &quot;Master of Mathematics&quot;, &quot;1894&quot;, &quot;Sorbonne Université&quot;, &quot;Paris, France&quot;
+) %&gt;% 
+  detailed_entries(Degree, Year, Institution, Where)</code></pre>
+<p>al compilar a pdf creará</p>
+<p><img src="pic5.png" />
+Hasta este punto habra credo un cv funcional y no tendrá que preocuparse del diseño, sangrado o alineación del texto. Pero aun sigue siendo engorroso tener los datos y el código en el mismo lugar. Para resolver este problem tome como base el flujo de trabajo del paquete <a href="http://nickstrayer.me/datadrivencv/">datadrivencv</a> creado por <a href="https://github.com/nstrayer">Nick Strayer</a>.</p>
+<div id="guardar-sus-datos-en-google-sheets" class="section level2">
+<h2>Guardar sus datos en Google sheets</h2>
+<p>Utilizaremos el paquete <code>googlesheets4</code> para descargar los datos de nuestro cv desde una hoja de calculo de Google. Sugiero copiar mi <a href="https://docs.google.com/spreadsheets/d/1AN85IIvbcMnGbcOCX3jurB4fMOp_niAUbDBU_zfjFEw/edit?usp=sharing">hoja</a> y reemplazar sus datos.
+<img src="pic6.png" />
+El documento tiene las siguientes:</p>
+<ol style="list-style-type: decimal">
+<li>entries: información acerca de educación, experiencia laboral, certificaciones, etc.</li>
+<li>lenguaje_skills: herramientas o habilidades que maneja.</li>
+<li>post_info: informacion acerca de post.</li>
+<li>text_block: informacion adicional como su descripción profesional o intereses.</li>
+<li>contact_info: información de contacto (email, teléfono, etc)</li>
+</ol>
+</div>
+<div id="crear-funciones-personalizadas" class="section level2">
+<h2>Crear funciones personalizadas</h2>
+<p>La siguiente función permite crear un objeto con toda la información de la hoja de calculo,</p>
+<ol style="list-style-type: decimal">
+<li>data_location: es el link de la hoja de calculo de google sheet</li>
+<li>pdf_mode: si es TRUE se eliminan los link de los textos.</li>
+<li>sheet_is_publicly_readable: TRUE si el link de la hoja de calculo es público</li>
+</ol>
+<pre class="r"><code>create_CV_object &lt;-  function(data_location,
+                              pdf_mode = FALSE,
+                              sheet_is_publicly_readable = TRUE) {
+  
+  cv &lt;- list(
+    pdf_mode = pdf_mode,
+    links = c()
+  )
+  
+  is_google_sheets_location &lt;- stringr::str_detect(data_location, &quot;docs\\.google\\.com&quot;)
+  
+  if(is_google_sheets_location){
+    if(sheet_is_publicly_readable){
+      # This tells google sheets to not try and authenticate. Note that this will only
+      # work if your sheet has sharing set to &quot;anyone with link can view&quot;
+      googlesheets4::gs4_deauth()
+    } else {
+      # My info is in a public sheet so there&#39;s no need to do authentication but if you want
+      # to use a private sheet, then this is the way you need to do it.
+      # designate project-specific cache so we can render Rmd without problems
+      options(gargle_oauth_cache = &quot;.secrets&quot;)
+    }
+    
+    read_gsheet &lt;- function(sheet_id){
+      googlesheets4::read_sheet(data_location, sheet = sheet_id, skip = 1, col_types = &quot;c&quot;)
+    }
+    cv$entries_data  &lt;- read_gsheet(sheet_id = &quot;entries&quot;)
+    cv$skills        &lt;- read_gsheet(sheet_id = &quot;language_skills&quot;)
+    cv$text_blocks   &lt;- read_gsheet(sheet_id = &quot;text_blocks&quot;)
+    cv$contact_info  &lt;- read_gsheet(sheet_id = &quot;contact_info&quot;)
+    cv$post_info  &lt;- read_gsheet(sheet_id = &quot;post_info&quot;)
+  } else {
+    # Want to go old-school with csvs?
+    cv$entries_data &lt;- readr::read_csv(paste0(data_location, &quot;entries.csv&quot;), skip = 1)
+    cv$skills       &lt;- readr::read_csv(paste0(data_location, &quot;language_skills.csv&quot;), skip = 1)
+    cv$text_blocks  &lt;- readr::read_csv(paste0(data_location, &quot;text_blocks.csv&quot;), skip = 1)
+    cv$contact_info &lt;- readr::read_csv(paste0(data_location, &quot;contact_info.csv&quot;), skip = 1)
+    cv$post_info &lt;- readr::read_csv(paste0(data_location, &quot;post_info.csv&quot;), skip = 1)
+  }
+  
+  
+  extract_year &lt;- function(dates){
+    date_year &lt;- stringr::str_extract(dates, &quot;(20|19)[0-9]{2}&quot;)
+    date_year[is.na(date_year)] &lt;- lubridate::year(lubridate::ymd(Sys.Date())) + 10
+    
+    date_year
+  }
+  
+  parse_dates &lt;- function(dates){
+    
+    date_month &lt;- stringr::str_extract(dates, &quot;(\\w+|\\d+)(?=(\\s|\\/|-)(20|19)[0-9]{2})&quot;)
+    date_month[is.na(date_month)] &lt;- &quot;1&quot;
+    
+    paste(&quot;1&quot;, date_month, extract_year(dates), sep = &quot;-&quot;) %&gt;%
+      lubridate::dmy()
+  }
+  
+  # Clean up entries dataframe to format we need it for printing
+  cv$entries_data %&lt;&gt;%
+    tidyr::unite(
+      tidyr::starts_with(&#39;description&#39;),
+      col = &quot;description_bullets&quot;,
+      sep = &quot;\n- &quot;,
+      na.rm = TRUE
+    ) %&gt;%
+    dplyr::mutate(description_bullets = as.list(strsplit(description_bullets , &quot;\n- &quot;)) ) %&gt;% 
+    dplyr::mutate(
+      # description_bullets = ifelse(description_bullets != &quot;&quot;, paste0(&quot;- &quot;, description_bullets), &quot;&quot;),
+      start = ifelse(start == &quot;NULL&quot;, NA, start),
+      end = ifelse(end == &quot;NULL&quot;, NA, end),
+      start_year = extract_year(start),
+      end_year = extract_year(end),
+      no_start = is.na(start),
+      has_start = !no_start,
+      no_end = is.na(end),
+      has_end = !no_end,
+      timeline = dplyr::case_when(
+        no_start  &amp; no_end  ~ &quot;N/A&quot;,
+        no_start  &amp; has_end ~ as.character(end),
+        has_start &amp; no_end  ~ paste(&quot;Current&quot;, &quot;-&quot;, start),
+        TRUE                ~ paste(end, &quot;-&quot;, start)
+      )
+    ) %&gt;%
+    dplyr::arrange(desc(parse_dates(end))) %&gt;%
+    dplyr::mutate_all(~ ifelse(is.na(.), &#39;N/A&#39;, .))
+  
+  cv
+}</code></pre>
+<p>Esta función elimina los links de un texto</p>
+<pre class="r"><code>sanitize_links &lt;- function(cv, text){
+  if(cv$pdf_mode){
+    link_titles &lt;- stringr::str_extract_all(text, &#39;(?&lt;=\\[).+?(?=\\])&#39;)[[1]]
+    link_destinations &lt;- stringr::str_extract_all(text, &#39;(?&lt;=\\().+?(?=\\))&#39;)[[1]]
+    
+    n_links &lt;- length(cv$links)
+    n_new_links &lt;- length(link_titles)
+    
+    if(n_new_links &gt; 0){
+      # add links to links array
+      cv$links &lt;- c(cv$links, link_destinations)
+      
+      # Build map of link destination to superscript
+      link_superscript_mappings &lt;- purrr::set_names(
+        paste0(&quot;&lt;sup&gt;&quot;, (1:n_new_links) + n_links, &quot;&lt;/sup&gt;&quot;),
+        paste0(&quot;(&quot;, link_destinations, &quot;)&quot;)
+      )
+      
+      # Replace the link destination and remove square brackets for title
+      text &lt;- text %&gt;%
+        stringr::str_replace_all(stringr::fixed(link_superscript_mappings)) %&gt;%
+        stringr::str_replace_all(&#39;\\[(.+?)\\]&#39;, &quot;\\1&quot;)
+    }
+  }
+  
+  list(cv = cv, text = text)
+}</code></pre>
+<p>También se necesita funciones para imprimir los datos descargados</p>
+<pre class="r"><code># print text block
+print_text_block &lt;- function(cv, label){
+  text_block &lt;- dplyr::filter(cv$text_blocks, loc == label) %&gt;%
+    dplyr::pull(text)
+  
+  strip_res &lt;- sanitize_links(cv, text_block)
+  
+  cat(strip_res$text)
+  
+  invisible(strip_res$cv)
+}
+
+# print table of skills
+print_skill &lt;- function(cv){
+  
+  glue_template &lt;- &quot;
+\\cvskill{&lt;&lt;group&gt;&gt;}{&lt;&lt;skills&gt;&gt;}&quot;
+  
+  skills_formatted &lt;- cv$skills %&gt;%
+    mutate(skill = if_else(is.na(details)|details==&quot;&quot;, glue::glue(&quot;{skill}&quot;), glue::glue(&quot;{skill} ({details})&quot;))) %&gt;% 
+    group_by(group) %&gt;% 
+    summarize(skills = glue::glue_collapse(skill, sep = &quot;, &quot;)) 
+  
+  cv_skill &lt;- skills_formatted %&gt;% 
+    glue::glue_data(glue_template, .open = &quot;&lt;&lt;&quot;, .close = &quot;&gt;&gt;&quot; ) %&gt;% 
+    paste0(., collapse = &#39;\n&#39;)
+  
+  cv_skill_env &lt;- paste0(&#39;\n\\begin{cvskills}\n&#39;, cv_skill, &#39;\n\\end{cvskills}\n&#39; , collapse= &#39;\n&#39;)
+  
+  cat(cv_skill_env)
+  
+  invisible(cv)
+}
+
+# print table of posts
+print_post&lt;- function(cv, glue_template = &quot;default&quot;){
+  
+  if(glue_template == &quot;default&quot;){
+    glue_template &lt;- &quot;
+- [{name}]({link})
+\n&quot;
+  }  
+  print(glue::glue_data(cv$post_info , glue_template))
+  
+  invisible(cv)
+}</code></pre>
+<p>Bien, ahora reemplacemos</p>
+<pre class="r"><code>knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(vitae)</code></pre>
+<p>por esto, para poder usar las funciones anteriores</p>
+<pre class="r"><code>knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(vitae)
+library(dplyr)
+library(magrittr)
+source(&quot;Utils/data_download_funs.R&quot;)
+
+CV &lt;- create_CV_object(
+  data_location = &quot;https://docs.google.com/spreadsheets/d/19YWFjpiCqTbrwrU1hpxDNubZKoNi-o0DvOQbcHqsc7c/edit?usp=sharing&quot;,  
+  pdf_mode = FALSE
+)</code></pre>
+<p>Para la sección de Educación podemos reemplazar</p>
+<pre class="r"><code>library(tibble)
+tribble(
+  ~ Degree, ~ Year, ~ Institution, ~ Where,
+  &quot;Informal studies&quot;, &quot;1889-91&quot;, &quot;Flying University&quot;, &quot;Warsaw, Poland&quot;,
+  &quot;Master of Physics&quot;, &quot;1893&quot;, &quot;Sorbonne Université&quot;, &quot;Paris, France&quot;,
+  &quot;Master of Mathematics&quot;, &quot;1894&quot;, &quot;Sorbonne Université&quot;, &quot;Paris, France&quot;
+) %&gt;% 
+  detailed_entries(what = Degree, when = Year, with = Institution, where = Where)</code></pre>
+<p>por</p>
+<pre class="r"><code>CV$entries_data %&gt;% 
+  filter(section == &#39;education&#39;) %&gt;% 
+  detailed_entries(
+    what = institution,
+    when = glue::glue(&quot;{`start`} - {`end`}&quot;),
+    with = title,
+    where = loc,
+    why = description_bullets
+  )</code></pre>
+<p>Para imprimir sus habilidades</p>
+<pre class="r"><code>CV %&gt;% print_skill()</code></pre>
+<p>Para imprimir sus posts</p>
+<pre class="r"><code>CV %&lt;&gt;% print_post()</code></pre>
+<p>Todos los archivos se encuentran alojado <a href="https://github.com/DarwinCV/automated-CV">aquí</a>.</p>
+<p>Quiero agredecer a <strong>Nick Strayer</strong> y <strong>Mitchell O’Hara-Wild</strong> por el maravilloso trabajo realizado en el paquete vitae y datadrivencv.</p>
+</div>
+</div>
